@@ -12,7 +12,6 @@ public class HTTPServer {
         while (true){
             Socket client = serverSocket.accept();
             new ReadWriteThread(client);
-
         }
     }
 }
