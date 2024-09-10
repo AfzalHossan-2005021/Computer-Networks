@@ -1,7 +1,6 @@
 package Server;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.util.Date;
 
@@ -16,8 +15,20 @@ public class ReadWriteThread implements Runnable{
     }
     
     String handleTxtFile(String relativePath){
-        String body = "";
-        return  body;
+        StringBuilder body = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(relativePath))) {
+            String line;
+            body.append("<pre>");  // Preserve formatting with <pre> tag
+            while ((line = br.readLine()) != null) {
+                body.append(line).append("\n");  // Output each line
+            }
+            body.append("</pre>");
+        } catch (FileNotFoundException e) {
+            body.append("<p>File not found: " + relativePath + "</p>");
+        } catch (IOException e) {
+            body.append("<p>Error reading file: " + e.getMessage() + "</p>");
+        }
+        return body.toString();
     }
     String handleImageFile(String relativePath){
         String body = "";
