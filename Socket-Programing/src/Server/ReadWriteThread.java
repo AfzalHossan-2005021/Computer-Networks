@@ -147,7 +147,7 @@ public class ReadWriteThread implements Runnable{
                         } else if (file.isFile()) {
                             htmlContent += generateFileHtml(relativePath);
                         }
-                        socketWrapper.write("HTTP/1.1 200 OK\r\n");
+                        socketWrapper.write("HTTP/1.0 200 OK\r\n");
                         socketWrapper.write("Server: Java HTTP Server: 1.0\r\n");
                         socketWrapper.write("Date: " + new Date() + "\r\n");
                         socketWrapper.write("Content-Type: " + mimeType + "\r\n");
@@ -175,7 +175,7 @@ public class ReadWriteThread implements Runnable{
                         }
                     } else {
                         String errorMessage = generateErrorMessage();
-                        socketWrapper.write("HTTP/1.1 404 NOT FOUND\r\n");
+                        socketWrapper.write("HTTP/1.0 404 NOT FOUND\r\n");
                         socketWrapper.write("Server: Java HTTP Server: 1.0\r\n");
                         socketWrapper.write("Date: " + new Date() + "\r\n");
                         socketWrapper.write("Content-Type: text/html\r\n");
@@ -185,14 +185,31 @@ public class ReadWriteThread implements Runnable{
                         socketWrapper.flush();
                         System.out.println("404: Page not found");
                     }
+                } else if (partsOfRequest[0].equals("UPLOAD")) {
+                    String fileName = request.replace("UPLOAD ", "");
+                    String uploadDirectory = ROOT + "\\uploaded";
+                    File directory = new File(uploadDirectory);
+                    if (directory.exists() || directory.mkdir()) {
+                        InputStream input = client.getInputStream();
+                        File outputFile = new File(directory, fileName);
+                        FileOutputStream fos = new FileOutputStream(outputFile);
+                        byte[] buffer = new byte[CHUNK_SIZE];
+                        int bytesRead;
+                        while ((bytesRead = input.read(buffer)) != -1) {
+                            fos.write(buffer, 0, bytesRead);  // Write the chunk to the file
+                        }
+                        fos.close();
+                    }
+                } else if (request.equals("UPLOAD:ERROR")) {
+                    System.out.println("The given file name or format is invalid");
                 }
             }
             socketWrapper.closeConnection();
         } catch (IOException e) {
             try {
                 client.close();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+            } catch (IOException ioException) {
+                System.out.println(ioException.getMessage());
             }
         }
     }

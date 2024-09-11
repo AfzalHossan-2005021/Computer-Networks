@@ -1,0 +1,72 @@
+git config user.name				to show user name
+git config user.email				to show user email
+git config --list				to show all the user info
+git config --global init.defaultBranch <name>	to change master/main
+
+touch <file name>				for making a new file in the current directory
+rm -rf <file name>				to delete a file from current directory
+rm <file name>					to delete a file from current directory
+mkdir <directory name>				for making a new directory in the current directory
+rmdir <directory name>				for deleting the directory in the current directory
+cat <file name>					to show the content of the file in git bash
+code .						to open vs code
+code <file name>				to open file in vs code
+cd <directory name>				for change directory
+cd ..						for go to outer directory
+git init					for opening a git repository
+git status					for status of the git repository
+git status --short				for short status of the git repository
+ls						for showing the visiable elements in a directory
+dir						for showing the visiable elements in a directory
+ls -a						for showing all the visiable and hidden elements in a directory
+ls -lart					for showing all the elements in a directory with info
+git add .					for taking all the untracked element in repository to stage
+git add <name>					for taking specific element in repository to stage
+git commit -m "a message"			for commiting the staged files
+git commit -a -m "a message"			for staging and then commiting the files
+git log						for commit history
+git log --oneline				for commit history in brief
+cat <file name>             			to show the content of the file
+git rm --cached <file>				to unstaged certain file
+
+git checkout <ref from git log --oneline>	to point the head to that commit
+git checkout master				to point the head to master
+
+git restore <file_name>				to restore all unstage changes
+
+git revert <ref from git log --oneline>		to revert a commit and keep both as commited with vim
+git revert HEAD --no-edit			to revert a commit and keep both as commited without vim
+
+git reset                   			to unstaged all staged files
+git reset <file name>       			to unstage certain file
+git reset --hard HEAD~1				to goto first commit deleting all the commit
+git reset --hard HEAD^				to goto previous commit deleting last commit
+git reset <ref from git log --oneline>		to delete all the commit after that commit and keep changes in unstaged files
+git reset <ref from git log --oneline> --hard	to delete all the commit after that commit and keep unstaged files as in that commit
+
+git remote add upstream <URL> 			to link a upstream url to curent repository
+git remote add origin <URL>			to link a github repository with current local repository
+git remote -v					to show remote url
+git remote rm origin				to delete remote url
+git push origin master				to push the commited into the linked repository in main branch
+git push -u origin master			to push the commit into the linked repository
+git push origin <branch-name>			to push the commited into the linked repository in selected branch
+git push origin <name> -f			to push the revert commit that means to reverse push
+
+git branch <name>				to create a new branch
+git checkout <branch-name>			to point HEAD to that branch
+git checkout master				to point HEAD to master branch
+gti checkout -b <branch-name>			to create a branch and switch to it
+git branch -M main				to HEAD to main branch
+git branch -D <branch-name>			to delete a branch that is not marged
+git branch -d <branch-name>			to delete a branch that is marged
+git marge <branch-name>				to marge a branch with master branch
+git branch -a					to show all branches
+
+git clone <URL from github repo>		to clone a repository locally
+
+git fetch --all --prune				to add all things origin from upstream
+git reset --hard upstream/main			to add all things in origin from upstream
+git pull origin master				to update a local repository according to github
+git pull upstream main				to add all things in origin from upstream
+git rebase -i <URL of base commit>  		to marge commit in fewer commit
