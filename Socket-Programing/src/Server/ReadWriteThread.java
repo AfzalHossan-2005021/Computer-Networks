@@ -5,11 +5,11 @@ import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
 
-import static Server.HTTPServer.CHUNK_SIZE;
-import static Server.HTTPServer.PORT;
+import static Server.HTTPServer.*;
 
 public class ReadWriteThread implements Runnable{
     private final Socket client;
@@ -114,7 +114,11 @@ public class ReadWriteThread implements Runnable{
             SocketWrapper socketWrapper = new SocketWrapper(client);
             String request = socketWrapper.read();
             if(request != null && !request.isEmpty()){
-                System.out.println(request);
+                String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+                socketWrapper.writeLog(timeStamp, true);
+                socketWrapper.writeLog("Request:\n", false);
+                socketWrapper.writeLog(request, true);
+                socketWrapper.writeLog("\nResponse:\n", false);
                 String[] partsOfRequest = request.split(" ");
                 if(partsOfRequest[0].equals("GET")){
                     String relativePath = ROOT + partsOfRequest[1].replace("%20", " ");
@@ -160,7 +164,6 @@ public class ReadWriteThread implements Runnable{
                             socketWrapper.write("\r\n");
                             socketWrapper.flush();
                             OutputStream output = client.getOutputStream();
-
                             try (FileInputStream fileInput = new FileInputStream(file)) {
                                 byte[] buffer = new byte[CHUNK_SIZE];
                                 int bytesRead;
@@ -170,6 +173,7 @@ public class ReadWriteThread implements Runnable{
                                 output.flush();
                             }
                         }
+                        socketWrapper.writeLog("\n\n", true);
                     } else {
                         String errorMessage = generateErrorMessage();
                         socketWrapper.write("HTTP/1.1 404 NOT FOUND\r\n");
