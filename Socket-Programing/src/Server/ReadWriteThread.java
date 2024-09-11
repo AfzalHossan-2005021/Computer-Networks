@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.Date;
 
+import static Server.HTTPServer.CHUNK_SIZE;
 import static Server.HTTPServer.PORT;
 
 public class ReadWriteThread implements Runnable{
@@ -146,14 +147,29 @@ public class ReadWriteThread implements Runnable{
                         socketWrapper.write("Server: Java HTTP Server: 1.0\r\n");
                         socketWrapper.write("Date: " + new Date() + "\r\n");
                         socketWrapper.write("Content-Type: " + mimeType + "\r\n");
-                        if(mimeType == "text/html"){
+                        if(mimeType.equals("text/html")){
                             socketWrapper.write("Content-Length: " + htmlContent.length() + "\r\n");
+                            socketWrapper.write("\r\n");
+                            socketWrapper.write(htmlContent);
+                            socketWrapper.flush();
                         } else {
+                            String[] filePath = partsOfRequest[1].split("/");
+                            String fileName = filePath[filePath.length-1];
+                            socketWrapper.write("Content-Disposition: attachment; filename=\"" + fileName + "\"\r\n");
                             socketWrapper.write("Content-Length: " + (int)file.length() + "\r\n");
+                            socketWrapper.write("\r\n");
+                            socketWrapper.flush();
+                            OutputStream output = client.getOutputStream();
+
+                            try (FileInputStream fileInput = new FileInputStream(file)) {
+                                byte[] buffer = new byte[CHUNK_SIZE];
+                                int bytesRead;
+                                while ((bytesRead = fileInput.read(buffer)) != -1) {
+                                    output.write(buffer, 0, bytesRead);
+                                }
+                                output.flush();
+                            }
                         }
-                        socketWrapper.write("\r\n");
-                        socketWrapper.write(htmlContent);
-                        socketWrapper.flush();
                     } else {
                         String errorMessage = generateErrorMessage();
                         socketWrapper.write("HTTP/1.1 404 NOT FOUND\r\n");

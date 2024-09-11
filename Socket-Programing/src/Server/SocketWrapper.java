@@ -9,7 +9,7 @@ public class SocketWrapper {
 
     public SocketWrapper(Socket socket) throws IOException {
         bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        printWriter = new PrintWriter(socket.getOutputStream());
+        printWriter = new PrintWriter(socket.getOutputStream(), false);
     }
 
     public String read() throws IOException{
