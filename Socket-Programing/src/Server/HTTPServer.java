@@ -13,6 +13,7 @@ public class HTTPServer {
         ServerSocket serverSocket = new ServerSocket(PORT);
         while (true){
             Socket client = serverSocket.accept();
+            System.out.println("Accepted");
             new ReadWriteThread(client);
         }
     }

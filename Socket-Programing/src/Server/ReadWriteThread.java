@@ -173,7 +173,6 @@ public class ReadWriteThread implements Runnable{
                                 output.flush();
                             }
                         }
-                        socketWrapper.writeLog("\n\n", true);
                     } else {
                         String errorMessage = generateErrorMessage();
                         socketWrapper.write("HTTP/1.1 404 NOT FOUND\r\n");

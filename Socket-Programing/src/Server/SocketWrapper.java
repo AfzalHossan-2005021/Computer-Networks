@@ -46,6 +46,7 @@ public class SocketWrapper {
     }
 
     public void closeConnection() throws IOException {
+        logPrintWriter.println("\n\n\n\n\n");
         bufferedReader.close();
         printWriter.close();
         logPrintWriter.close();

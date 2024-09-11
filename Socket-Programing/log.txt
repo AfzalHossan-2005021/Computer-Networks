@@ -1,13 +1,13 @@
-2024-09-11 07:32:04
+2024-09-11 07:39:20
 Request:
-GET / HTTP/1.1
+GET /Home/New%20folder HTTP/1.1
 
 Response:
 HTTP/1.1 200 OK
 Server: Java HTTP Server: 1.0
-Date: Wed Sep 11 07:32:04 BDT 2024
+Date: Wed Sep 11 07:39:20 BDT 2024
 Content-Type: text/html
-Content-Length: 536
+Content-Length: 201
 
 <!DOCTYPE html>
 <html>
@@ -15,20 +15,22 @@ Content-Length: 536
 <title></title>
 </head>
 <body>
-<a href="http://localhost:5021/Assignment_1.pdf" style="color: black; text-decoration: none;" download>Assignment_1.pdf</a><br><a href="http://localhost:5021/Home" style="color: black; text-decoration: none;"><b><i>Home</b></i></a><br><a href="http://localhost:5021/Image_1.png" style="color: black; text-decoration: none;">Image_1.png</a><br><a href="http://localhost:5021/uploaded" style="color: black; text-decoration: none;"><b><i>uploaded</b></i></a><br>
+<a href="http://localhost:5021/Home/New%20folder/One" style="color: black; text-decoration: none;"><b><i>One</b></i></a><br>
 </body>
 </html>
 
-2024-09-11 07:32:20
+
+
+2024-09-11 07:39:21
 Request:
-GET /Image_1.png HTTP/1.1
+GET /Home/New%20folder/One HTTP/1.1
 
 Response:
 HTTP/1.1 200 OK
 Server: Java HTTP Server: 1.0
-Date: Wed Sep 11 07:32:20 BDT 2024
+Date: Wed Sep 11 07:39:21 BDT 2024
 Content-Type: text/html
-Content-Length: 5153
+Content-Length: 77
 
 <!DOCTYPE html>
 <html>
@@ -36,129 +38,13 @@ Content-Length: 5153
 <title></title>
 </head>
 <body>
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABoCAYAAAAHIFUvAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAA5ZSURBVHhe7Z15dFTlGcaf2feZZEJWQiATEBBkkSqKLYpVW5QqtrTHBTxat9bl2GM9Lm3/6F9q61KPS3cPHMrSc/RUJFKLBYFW0SoQAjpBYBISSAIkmZnMdmefvu+XiSAqhJhMrvD9IMzl3jszN9/zPe/7fnfunU+TIyAZNv67+xDq3/chl83hB3PPwUWTq/JbPk9vby+0+WXJMLCxoRX/eGevWL7x8sknFaMfKcgwwWLUv+eDQafDDZdNwvkTyvNbTo4UZBjYuKNPDKOexJg3cDEYKcgQI5xBOWMwYjCDSuqKomDZsmUoLy9HKBTCokWLYLfb81v7iEaj2LRpE9rb22E2m1FTU4N58+blt56ZvL2zDWu37h+0GINO6haLBfX19fB4PFi/fj2CwaAQqampKb8HkMlkMHv2bGzYsAEVFRVCsIaGBvGmra2t8Pl8Yr8dO3bg6NGjYvnrzJ6DfrxBzjAb9YMSo59BCcKuMBgM+PDDDzF16lToKHG9/PLLePbZZ7F9+3axj9PpRGlpKdLpNC6++GKsW7cOK1aswOrVq7Fq1Sps3rwZr776Kl555RUhytedXc1diCczuPrC2kGLwQxKkMbGRuGSxYsXY+vWraLXd3d3i0e/35/fC9i/f78IXSwOb3/44YdF48+aNQtz584V4tx6661nRCgz6PqaMqKkxONg0f2ayC8PmH379kGv1wunzJ8/HzNmzBA/EydOFA3dDwvHTmIXxWIxzJkzB21tbSKn1NXVoaOjA9XV1aisrBQu+zpjMxuES/a1B+h30cJTWZTfMnASicTgkrrki2nYfxSr325CMp3BgovqcMX5Y/NbBoYcqQ8xM8eXiRE5V1mc4DfQeOR00Go16nGIv7sL/mAvyqki02o0MFKoSyRTYjkYDsBqtUOn1dKPDqlUShQLFouVnplDln4Fk9g/CQOFUn+gBw5nMS3rEImEkNNooacwwo9Wo5nymR92hxVJeh0r5cIkhYpkKoniYjdS6RSoWej1MzCZjPTyOaSpYkzEY7QPvafZThVkgt5VI0Kvnt7XZKT9jqNh/xFyyp7Tdoo/EFSPIJ2HDiIYCiPCRUCRG6OKXPDtb6FG1EBvpEPU6EGL1OgJitF6GEkYEwnicNkol0XgtjlxoO0Qaj3jcKi9DTq9BeNqKuFr2Y9Mlp6oycFmd6KsuAS+5maYTXokszloMxpYrBYq2yMYW+tBe+chpKhayqZzqBk7BikljvbD7XC5nIhQznS7R0OjTeDIkaPI0mtWVY6Fp7Ym/1scYyeFr1WbKHylBibKpt0HsOG93erLITx+iZAwJmqkNPVau92Bzs5OOBwucoQJ2WwWSlSB1W6j5Qx14JwoMASkWCwapl6tgYF6N7uJXWYx9z2PC4x4TEE0loCThGTHpagX63UahCMRcqHt09fTkJs4hPDzeF08rsBm++zg91QMVJSdzZ2YecOTuOeGS9QjSHf3YTQ0eqHXmCgEUMiyGkWCmzLlPHibvMgkshhVQfV9mnpsBw0k9RnqtaVwUihLZSjM5NLopNLabjIgSr26avQYhMNBcl0CdpuJDYKamjH4xLuXXFUCs4HCnM2KXhrUaqjh4+SQVJIbXwf6F1aHBRPHT0BL8yfoCUbgKnJg2tTpFKhOj50+EoUTPYlyzew6XDnrs6J090Zx7pKnUFfhxutPLFaPIGmK55FojJoiRzkiAwc5gEMUl8NZck2KcobJZEIyGaee2+eIREKhOG4lV2VhNBqEu3h/3pd7N/9men4+uSBGItkob2RpX3YAl5hZClkacpHRoEUoHKJ8YkeOHME5iZ+jFflBL15XQwdjpFyhJVedLiwKV1+JLxBl885mzFv8W+x563FMrCpWkUMOH8belgPUWAYRigycM6hRE5RIqWmpN5MIGS2M5ACTwSRO1SSSMSSUNOULHTUkjWMMwHjKIR30WiXFxTjS0SmSc5waP0WNes7kSQhR8RCikIVcit5HC4vNAc/oMny010thzga7wUohM0D7JOHx1FJREKFwFUWOhJtE46ziImf+iE+PRl8XOcX7OVH8oRim3PI0asuLyCFL1CNIhno192x2RSQSo3huFcvcM7mi4l7LlZfBwL2Uez8dNv3NkHi8XzyepBxjzsd9StbUk7ln835KPE6939q3LUcBiZ3BT6IX6HOXsS9X0Bqu6pJUOKRpvYUcGU8kyYUmcYyDccfxNObDlxCFcsqV+ZzycetRTKMc8tMfXqQeQbooce/xNQuHcEOa9VRKUuNwz87lyDFmHSwGqpw8HsoJXO5+PWlsJlE29ocvDzllnFj/jrcNb23dpR5B+DD6YzX3xP7D4p57Ys/8qj11pOFTLCs39oevY6LwWXPVCMInIQOBwCkbe6QOl9+3P7HnKOxxqNNT7kpTjstQp+Ft3Hnc7hIqj0/t4EYSZRWJEidRFuRFiUbC6hGEUdGhnIAGQX+3GHiazEakqUhIJNJUGtsxZkw1Wlt8NLaJo6ioGKOrq0WFOBCOF+XaORNwyUS3ugRRM/FYDIFQrxhMsiu0VHVpaLmYqrlsJk1jnjBVe0YSxUXbuGAYGP3hK5nOYdGcGnlycSAcPXIYvpZWVFZUoqOjHYFIAhWlJdjj9dIgtR1th1oRjkXgD/ZQXji9z0OmeUqx5IopQsSPWg5LQQaCw+mEu6RInLysqhwNt8uBFOULT51HlMR8glFHg00u1dlBp8vU2lEUFBV09KgoqZ/NLF2/DWve9WLBNzzSISPN0n9tQ/3WJlQUOzB78hjpkJFEiPFeE9xOKx760VxMKHdIh4wUx8Sw4MFF38SkMaWIKAkpyEiwbP12IUYJOePBRXNx7thjlw1JQQrMll3NqH+/CWVFNhLjWyRGWX5LH1KQArN9b7v4TOaWq2Zh8gliMFKQAmM26MVp/o6eUN+KE5CCFJjLZ9bBYTXh1f/sxtqt3vzaY0hBCsykmjLccfUFNKLXYMXGBrx+gihSkBHg0mke3HnNbHGt2EoSpd8p/GmlHBiOIJsbm/GXdf9DKp/kr5peIwUZabaQKH9e94H4DP+Oq6bLkDXSXDrdg7uuuVBcdtrWJc/2qoY3P9iLjqNdUhA1caD9sBRETfBFDjKHqAhO7FIQFWEy6KUgIwFfFvvXNxuwdH1jfg25I5vD+02HZA4pNHxbwo+frudLvUSIcliNeObuK/GrZVtQZtdKhxQSvnT05ifWoMhuxopHF+Lvv/w+LEYDLnlgmbjv5IHrL5SCFIp4Mo2bHn8NFW4bXrz/u/m1wPP3fgdzzq2GQtv5EiIZsgpAvxijRznwwn3HxDie259Zh/FlZinIcMNi3MhilDg+44wTSaaz2LL9EynIcMJh6GYSo4qc8eKXOON44rGozCHDhZJI47an1qKKnTEAMRi+fU8KMkys3LhbJOmThakvQgoyTPANPIPJBlKQYeKmb08VV5fc8/ybfSsGiBRkmLAY9Vj60PdwJBDFvS8MTBR5LmuY4a/7W/nYQnT2RE4pCt/WtmVXqyx7CwFXT3zKpLzYhpfun59fewyWYMlv1mJSpU06pBBwKFr52PXoCsZw3wlOYTFue7pe5Jv7Fl4gBSkUJoMOKyh8dfUquPe4RH8rjVUSyQyWP3ytCHEyZBUY/jqou577J6wmPfwhRdzrzsmfL5oLBnulICMBN/l5d/4J0+vKsfyRheKyUoa/c1EKUmC4se/63TpWBX944GrhjH7kl2COAHdQAo8qSfzxZ58Vox8pSIFgZ9z+zBtivLH8keu+9H52KUgB4M/Of/LcOvHZCFdTX+SMfqQgBYCvMAmE433OOIkYjBSkALQdCWHy2FGfVlMnQwpSAO5ecD7ebjiAv23YnV/z5UhBCsDYchde/vkCvPDaB6cURQpSIM6pLhHns15Yc3JRpCAFZEK1GysfvR4vrvnwS0WRghQYFoVPMrIoy/+9K7/2GFKQEWDCaHLKLxbi92u3fU4UKcgIMb6KRKGc8tJxomioKpYnF0cYX0cAi59cg3uvuwCLL5sgBVEDzZ0B3Pzk63jw2ulSELXgbevGpm17pCBqgme9k0ldZUhBVAQHKymIypCCqAwpiMqQggwBPO/JUCEF+YpwIj548GD+f18dKcgQMJQzXUtBVMYZLQhPxcdT6B0PTxzJc7v3/Scn5o3qhyc9PhExcXEyJSYs4/lD+JGn8eOJKcXFVkPMGX3qpO2AD60HO8VkkOlMGgaTBaVuN3Zs34ayigqklSQUJGEzOzBubC0ivV040hMUc956PB7wLKG+vU34xNcCvckMt9OOcDSKdCINR1ERps+YDpfdho8//hhTpkzJv+vgOeOv7Q2HeuH3B8RkkgklhkQ6hwl1dQj4eWqiJDQUILR6/sIXDUpKSskBipgtTlESGDdunLhx09/T1Xe7slYLAwmUJJdo6ZF/XEXFMBsN8Hq9UhC1wM03lILIpK4ypCAq46wSJBwOIRQKi5k5eYJiRYlTjulBJKbk9/g84VAIPX4/eukxSCGFJ8IPBgNieTii/VmTQ7i8fX/ru5TYNXDYzQj3RlFbNx4dh/ZCSWnhsliQouTPl9+mKIlPPm8qHFYr9u3xUpXVDJ3RjBKXAxFFgY2qNa3OgJmzZsJqNskqazDwHO2xaKxvinD6k6Qqy+l00VglKe774zEFT67P4wwWz0VlrUFvQCQSom5LlRhfEkL0z4PLM33abDYxIaSsslQEN5+sss5gznpBeD4oNXFWhqy2Fh8CoRisRj0yBh1SVG3lNHoUO2xQ4kmRJ6x2Oyoryqkay6ChoUEUAUaLGUaTEZREKMnrKbXoMHPGTDR5hy6pn5UOsVht0FMy5pOFTrsTJSVu8J1m3T1+EgNIxBUqjyMiuXN/dbpcqKiqRFlZqZie2+lyUqVmh51+hro/y6T+FeHmG7qk3ov/A4SCL20axFQbAAAAAElFTkSuQmCC" />
-</body>
-</html>
 
-2024-09-11 07:32:32
-Request:
-GET /Home HTTP/1.1
-
-Response:
-HTTP/1.1 200 OK
-Server: Java HTTP Server: 1.0
-Date: Wed Sep 11 07:32:32 BDT 2024
-Content-Type: text/html
-Content-Length: 313
-
-<!DOCTYPE html>
-<html>
-<head>
-<title></title>
-</head>
-<body>
-<a href="http://localhost:5021/Home/New folder" style="color: black; text-decoration: none;"><b><i>New folder</b></i></a><br><a href="http://localhost:5021/Home/Output.txt" style="color: black; text-decoration: none;">Output.txt</a><br>
-</body>
-</html>
-
-2024-09-11 07:32:41
-Request:
-GET /Home/Output.txt HTTP/1.1
-
-Response:
-HTTP/1.1 200 OK
-Server: Java HTTP Server: 1.0
-Date: Wed Sep 11 07:32:41 BDT 2024
-Content-Type: text/html
-Content-Length: 205
-
-<!DOCTYPE html>
-<html>
-<head>
-<title></title>
-</head>
-<body>
-<pre>7 1 5
-2 3 6
-* 4 8
-=> 16
-
-2 3 8
-1 * 4
-7 6 5
-=> 12
-
-3
-* 4 3
-2 5 6
-7 8 1
-=> 16
-
-4
-12 1 2 6
-10 8 7 4
-5 11 3 15
-9 13 14 *
-</pre>
-</body>
-</html>
-
-2024-09-11 07:32:55
-Request:
-GET /Assignment_1.pdf HTTP/1.1
-
-Response:
-HTTP/1.1 200 OK
-Server: Java HTTP Server: 1.0
-Date: Wed Sep 11 07:32:55 BDT 2024
-Content-Type: application/pdf
-Content-Disposition: attachment; filename="Assignment_1.pdf"
-Content-Length: 810178
-
-Downloading: Assignment_1.pdf
-
-
-2024-09-11 07:35:42
-Request:
-GET /Image_1.png HTTP/1.1
-
-Response:
-HTTP/1.1 200 OK
-Server: Java HTTP Server: 1.0
-Date: Wed Sep 11 07:35:42 BDT 2024
-Content-Type: text/html
-Content-Length: 5153
-
-<!DOCTYPE html>
-<html>
-<head>
-<title></title>
-</head>
-<body>
-<img src="data:image/png;base64,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" />
 </body>
 </html>
 
 
-2024-09-11 07:36:00
-Request:
-GET /Home HTTP/1.1
 
-Response:
-HTTP/1.1 200 OK
-Server: Java HTTP Server: 1.0
-Date: Wed Sep 11 07:36:00 BDT 2024
-Content-Type: text/html
-Content-Length: 313
 
-<!DOCTYPE html>
-<html>
-<head>
-<title></title>
-</head>
-<body>
-<a href="http://localhost:5021/Home/New folder" style="color: black; text-decoration: none;"><b><i>New folder</b></i></a><br><a href="http://localhost:5021/Home/Output.txt" style="color: black; text-decoration: none;">Output.txt</a><br>
-</body>
-</html>
+
 
 
