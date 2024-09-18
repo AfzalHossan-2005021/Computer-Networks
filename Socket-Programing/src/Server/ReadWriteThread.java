@@ -13,7 +13,6 @@ import static Server.HTTPServer.*;
 
 public class ReadWriteThread implements Runnable{
     private final Socket client;
-    static final String ROOT = "Public";
     public ReadWriteThread(Socket client) {
         this.client = client;
         new Thread(this).start();
@@ -114,13 +113,13 @@ public class ReadWriteThread implements Runnable{
             SocketWrapper socketWrapper = new SocketWrapper(client);
             String request = socketWrapper.read();
             if(request != null && !request.isEmpty()){
-                String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-                socketWrapper.writeLog(timeStamp, true);
-                socketWrapper.writeLog("Request:\n", false);
-                socketWrapper.writeLog(request, true);
-                socketWrapper.writeLog("\nResponse:\n", false);
                 String[] partsOfRequest = request.split(" ");
                 if(partsOfRequest[0].equals("GET")){
+                    String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+                    socketWrapper.writeLog(timeStamp, true);
+                    socketWrapper.writeLog("Request:\n", false);
+                    socketWrapper.writeLog(request, true);
+                    socketWrapper.writeLog("\nResponse:\n", false);
                     String relativePath = ROOT + partsOfRequest[1].replace("%20", " ");
                     File file = new File(relativePath);
                     Path path = Paths.get(relativePath);
@@ -163,14 +162,14 @@ public class ReadWriteThread implements Runnable{
                             socketWrapper.write("Content-Length: " + (int)file.length() + "\r\n");
                             socketWrapper.write("\r\n");
                             socketWrapper.flush();
-                            OutputStream output = client.getOutputStream();
+                            OutputStream outputStream = client.getOutputStream();
                             try (FileInputStream fileInput = new FileInputStream(file)) {
                                 byte[] buffer = new byte[CHUNK_SIZE];
                                 int bytesRead;
                                 while ((bytesRead = fileInput.read(buffer)) != -1) {
-                                    output.write(buffer, 0, bytesRead);
+                                    outputStream.write(buffer, 0, bytesRead);
                                 }
-                                output.flush();
+                                outputStream.flush();
                             }
                         }
                     } else {
@@ -186,22 +185,28 @@ public class ReadWriteThread implements Runnable{
                         System.out.println("404: Page not found");
                     }
                 } else if (partsOfRequest[0].equals("UPLOAD")) {
-                    String fileName = request.replace("UPLOAD ", "");
-                    String uploadDirectory = ROOT + "\\uploaded";
-                    File directory = new File(uploadDirectory);
-                    if (directory.exists() || directory.mkdir()) {
-                        InputStream input = client.getInputStream();
-                        File outputFile = new File(directory, fileName);
-                        FileOutputStream fos = new FileOutputStream(outputFile);
-                        byte[] buffer = new byte[CHUNK_SIZE];
-                        int bytesRead;
-                        while ((bytesRead = input.read(buffer)) != -1) {
-                            fos.write(buffer, 0, bytesRead);  // Write the chunk to the file
+                    String mimeType = socketWrapper.read();
+                    if(mimeType.contains("text") || mimeType.contains("image")) {
+                        socketWrapper.writeLine("200");
+                        String fileName = request.replace("UPLOAD ", "");
+                        String uploadDirectory = ROOT + "\\uploaded";
+                        File directory = new File(uploadDirectory);
+                        if (directory.exists() || directory.mkdir()) {
+                            File outputFile = new File(directory, fileName);
+                            FileOutputStream fileOutputStream = new FileOutputStream(outputFile);
+                            byte[] buffer = new byte[CHUNK_SIZE];
+                            int bytesRead;
+                            InputStream inputStream = client.getInputStream();
+                            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                                fileOutputStream.write(buffer, 0, bytesRead);  // Write the chunk to the file
+                            }
+                            fileOutputStream.close();
+                            inputStream.close();
                         }
-                        fos.close();
+                    } else {
+                        socketWrapper.writeLine("404");
+                        System.out.println("The given file name or format is invalid");
                     }
-                } else if (request.equals("UPLOAD:ERROR")) {
-                    System.out.println("The given file name or format is invalid");
                 }
             }
             socketWrapper.closeConnection();
