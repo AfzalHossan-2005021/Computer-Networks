@@ -6,15 +6,19 @@ import java.net.Socket;
 import static Server.HTTPServer.LOG_FILE_PATH;
 
 public class SocketWrapper {
+    private final OutputStream outputStream;
     private final BufferedReader bufferedReader;
+    private final BufferedWriter bufferedWriter;
     private final PrintWriter printWriter;
     private FileWriter logFileWriter;
     private final BufferedWriter logPbufferedWriter;
     private final PrintWriter logPrintWriter;
 
     public SocketWrapper(Socket socket) throws IOException {
+        outputStream = socket.getOutputStream();
         bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        printWriter = new PrintWriter(socket.getOutputStream(), false);
+        bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
+        printWriter = new PrintWriter(outputStream, false);
         try {
             this.logFileWriter = new FileWriter(LOG_FILE_PATH, true);
         } catch (IOException e) {
@@ -31,6 +35,12 @@ public class SocketWrapper {
     public void write(String str) {
         printWriter.write(str);
         logPrintWriter.write(str);
+    }
+
+    public void writeLine(String str) throws IOException {
+        bufferedWriter.write(str);
+        bufferedWriter.newLine();
+        bufferedWriter.flush();
     }
 
     public void flush(){

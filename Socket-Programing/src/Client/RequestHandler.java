@@ -6,22 +6,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static Client.Client.CHUNK_SIZE;
-
 public class RequestHandler implements Runnable {
-    private final Socket socket;
+    static final String HOST = "localhost";
+    static final int PORT = 5021;
+    static final int CHUNK_SIZE = 1024;
     private final String request;
-    private final OutputStream outputStream;
-    private final BufferedWriter bufferedWriter;
-    public RequestHandler(Socket socket, String request) throws IOException {
-        this.socket = socket;
+
+    public RequestHandler(String request) {
         this.request = request;
-        this.outputStream = socket.getOutputStream();
-        this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
         new Thread(this).start();
     }
 
-    private void writeLine(String line) {
+    private void writeLine(String line, BufferedWriter bufferedWriter) {
         try {
             bufferedWriter.write(line);
             bufferedWriter.newLine();
@@ -36,54 +32,51 @@ public class RequestHandler implements Runnable {
         if (request.startsWith("UPLOAD ")) {
             String filePath = request.replace("UPLOAD ", "").trim();
             File file = new File(filePath);
-            if (file.exists()){
-                Path path = Paths.get(filePath);
+            if (file.exists()) {
                 try {
+                    Socket socket = new Socket(HOST, PORT);
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    OutputStream outputStream = socket.getOutputStream();
+                    BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream));
+                    String uploadRequest = "UPLOAD " + file.getName();
+                    writeLine(uploadRequest, bufferedWriter);
+                    Path path = Paths.get(filePath);
                     String mimeType = Files.probeContentType(path);
-                    if (mimeType.contains("image") || mimeType.contains("text")) {
-                        String uploadRequest = "UPLOAD " + file.getName();
-                        writeLine(uploadRequest);
+                    writeLine(mimeType, bufferedWriter);
+                    String status = bufferedReader.readLine();
+                    if (status.equals("200")) {
                         try {
-                            FileInputStream fis = new FileInputStream(file);
+                            FileInputStream fileInputStream = new FileInputStream(file);
                             byte[] buffer = new byte[CHUNK_SIZE];
                             int bytesRead;
-                            while (true) {
-                                try {
-                                    if ((bytesRead = fis.read(buffer)) == -1) break;
-                                    outputStream.write(buffer, 0, bytesRead);
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            }
                             try {
-                                fis.close();
+                                while ((bytesRead = fileInputStream.read(buffer)) != -1){
+                                    outputStream.write(buffer, 0, bytesRead);
+                                }
+                                fileInputStream.close();
+                                outputStream.close();
+                                System.out.println("File upload successful.");
                             } catch (IOException exception) {
                                 System.out.println(exception.getMessage());
+                                System.out.println("File upload failed.");
                             }
                         } catch (FileNotFoundException exception) {
                             System.out.println(exception.getMessage());
                         }
                     } else {
-                        writeLine("UPLOAD:ERROR");
                         System.out.println("The given file name or format is invalid");
                     }
-                } catch (IOException ioException) {
-                    System.out.println(ioException.getMessage());
+                    bufferedReader.close();
+                    bufferedWriter.close();
+                    socket.close();
+                } catch (IOException exception) {
+                    System.out.println(exception.getMessage());
                 }
             } else {
-                writeLine("UPLOAD:ERROR");
-                System.out.println("The given file name or format is invalid");
+                System.out.println("File does not exist.");
             }
         } else {
-            writeLine("UPLOAD:ERROR");
-            System.out.println("The given file name or format is invalid");
-        }
-        try {
-            outputStream.close();
-            bufferedWriter.close();
-            socket.close();
-        } catch (IOException ioException) {
-            System.out.println(ioException.getMessage());
+            System.out.println("Invalid request.");
         }
     }
 }
