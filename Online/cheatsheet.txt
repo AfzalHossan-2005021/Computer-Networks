@@ -1,0 +1,509 @@
+/***** All commands are in privileged exec mode *****/
+
+
+Change hostname:
+=========================================================================================
+conf t
+hostname <hostname>
+exit
+
+
+password for user exec:
+=========================================================================================
+conf t
+line console 0
+password <password>
+login
+end
+
+
+password for privileged exec:
+=========================================================================================
+conf t
+enable secret <password>
+exit
+
+
+password for vty line access:
+=========================================================================================
+conf t
+line vty 0 15
+password <password>
+login
+end
+
+
+encrypt password
+=========================================================================================
+conf t
+service password-encryption
+exit
+
+
+show banner
+=========================================================================================
+conf t
+banner motd #<message>#
+exit
+
+
+show startup-config:
+=========================================================================================
+sh star
+
+
+show running-config:
+=========================================================================================
+sh ru
+
+
+save current configuration:
+=========================================================================================
+cop ru st
+
+
+reload the startup-config:
+=========================================================================================
+rel
+
+
+reload factory-config (if startup-config is modified):
+=========================================================================================
+er st
+
+
+configure switch virtual interface:
+=========================================================================================
+conf t
+interface vlan 1
+ip address <address> <subnet musk>
+no shutdown
+exit
+
+
+configure router interface:
+=========================================================================================
+conf t
+in <g0/0 or s0/0/0>
+ip ad <address> <subnet musk>
+no sh
+exit
+
+
+Router Subinterface Configuration:
+=========================================================================================
+conf t
+in <g0/0>.<subinterface id (similar to vlan id is good practice)>
+encapsulation dot1q <subinterface id>
+ip ad <address> <subnet musk>
+exit
+
+-> configure for all subinterfaces (no need: conf t for remaining)
+
+in <g0/0>
+no sh
+
+
+
+show ip interfaces in brief:
+=========================================================================================
+sh ip in b
+
+
+
+switch create vlan:
+=========================================================================================
+conf t
+vlan <vlan id>
+name <vlan name>
+end
+
+example:
+-----------------------------------------------------------------------------------------
+Configure terminal
+vlan 20
+name student
+end
+
+
+
+switch vlan port assign:
+=========================================================================================
+conf t
+interface <interface>
+switchport mode access
+switchport access vlan <vlan id>
+end
+
+example:
+-----------------------------------------------------------------------------------------
+Configure terminal
+interface fa0/18
+switchport mode access
+switchport access vlan 20
+end
+
+
+
+switch trunk configuration:
+=========================================================================================
+conf t
+interface <interface>
+switchport mode trunk
+switchport trunk native vlan <vlan id>
+switchport trunk allowed vlan <list of vlan id (comma separated)>
+end
+
+example:
+-----------------------------------------------------------------------------------------
+configure terminal
+interface fa0/1
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 10,20,30,99
+end
+
+
+
+
+
+legacy inter-vlan routing:
+=========================================================================================
+-> switch create vlan
+-> switch vlan port assign
+-> configure router interface
+
+
+
+Router-on-a-Stick Inter-VLAN Routing:
+=========================================================================================
+-> switch create vlan
+-> switch vlan port assign
+-> switch trunk configuration
+-> Router Subinterface Configuration
+
+example:
+-----------------------------------------------------------------------------------------
+In switch:
+---------------------------
+enable
+configure terminal
+vlan 10
+name CSE
+exit
+vlan 15
+name EEE
+exit
+vlan 20
+name BME
+exit
+vlan 99
+name ADMIN
+exit
+
+interface f0/5
+switchport mode access
+switchport access vlan 10
+exit
+interface f0/6
+switchport mode access
+switchport access vlan 15
+exit
+interface f0/7
+switchport mode access
+switchport access vlan 20
+exit
+
+interface f0/1
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 10,15,20
+end
+
+-------------------------------------------------
+show vlan brief
+show interface fa0/1 switchport 
+-------------------------------------------------
+
+
+In router:
+-------------------------------------------------
+enable
+configure terminal
+interface g0/0.10
+encapsulation dot1q 10
+ip address 192.168.10.1 255.255.255.0
+exit
+interface g0/0.15
+encapsulation dot1q 15
+ip address 192.168.15.1 255.255.255.0
+exit
+interface g0/0.20
+encapsulation dot1q 20
+ip address 192.168.20.1 255.255.255.0
+exit
+interface g0/0
+no shutdown
+exit
+interface s0/0/0
+ip address 100.2.2.1 255.255.255.252
+no shutdown
+exit
+ip route 0.0.0.0 0.0.0.0 100.2.2.2
+end
+
+-------------------------------------------------
+show ip interface
+show ip route
+-------------------------------------------------
+
+
+
+In neighbor router:
+-------------------------------------------------
+enable
+configure terminal
+interface g0/0
+ip address 100.5.5.1 255.255.255.0
+no shutdown
+exit
+interface s0/0/0
+ip address 100.2.2.2 255.255.255.252
+no shutdown
+exit
+ip route 0.0.0.0 0.0.0.0 100.2.2.1
+end
+
+-------------------------------------------------
+show ip interface
+show ip route
+-------------------------------------------------
+
+
+
+static NAT configuration:
+=========================================================================================
+conf t
+ip nat inside source static <local address> <global address>
+in <inside interface>
+ip nat inside
+exit
+in <outside interface>
+ip nat outside
+end
+
+
+example(both configure router nat)
+-----------------------------------------------------------------------------------------
+conf t
+ip nat inside source static 192.168.10.254 209.165.201.5
+interface serial 0/1/0
+ip nat inside
+exit
+interface serial 0/1/1
+ip nat outside
+end
+
+
+
+
+
+configure dynamic nat:
+=========================================================================================
+conf t
+ip nat pool <pool name> <first ip> <last ip> netmask <mask for ip range>
+access-list <list no> permit <network address> <wild card mask>
+ip nat inside source list <list on> pool <pool name>
+interface <inside interface>
+ip nat inside
+exit
+interface <outside interface>
+ip nat outside
+end
+
+
+example:
+-----------------------------------------------------------------------------------------
+conf t
+ip nat pool NAT-POOL1 209.165.200.226 209.165.200.240 netmask 255.255.255.224
+access-list 1 permit 192.168.0.0 0.0.255.255
+ip nat inside source list 1 pool NAT-POOL1
+interface serial 0/1/0
+ip nat inside
+exit
+interface serial 0/1/1
+ip nat outside
+end
+
+
+
+
+
+show ip nat translation:
+=========================================================================================
+show ip nat translations
+
+
+show ip nat statistics:
+=========================================================================================
+show ip nat statistics
+
+
+clear ip statistics:
+=========================================================================================
+clear ip nat statistics 
+
+
+Clears all dynamic address translation entries from the NAT translation table.
+=========================================================================================
+clear ip nat translation *
+
+
+
+
+
+Configure PAT to Use a Single IPv4 Address
+=========================================================================================
+conf t
+ip nat inside source list <list no> interface <global interface> overload
+access-list <list no> permit <network address> <wildcard mask>
+interface <inside interface>
+ip nat inside
+exit
+interface <outside interface>
+ip nat outside
+end
+
+
+example:
+-----------------------------------------------------------------------------------------
+conf t
+ip nat inside source list 1 interface serial 0/1/1 overload
+access-list 1 permit 192.168.0.0 0.0.255.255
+interface serial0/1/0
+ip nat inside
+exit
+interface Serial0/1/1
+ip nat outside
+end
+
+
+Configure PAT to Use an Address Pool:
+=========================================================================================
+conf t
+ip nat pool <pool name> <first ip> <last ip> netmask <mask for ip range>
+access-list <list no> permit <network address> <wild card mask>
+ip nat inside source list <list on> pool <pool name> overload
+interface <inside interface>
+ip nat inside
+exit
+interface <outside interface>
+ip nat outside
+end
+
+
+example:
+-----------------------------------------------------------------------------------------
+conf t
+ip nat pool NAT-POOL1 209.165.200.226 209.165.200.240 netmask 255.255.255.224
+access-list 1 permit 192.168.0.0 0.0.255.255
+ip nat inside source list 1 pool NAT-POOL1 overload
+interface serial 0/1/0
+ip nat inside
+exit
+interface serial 0/1/1
+ip nat outside
+end
+
+-----------------------------------------------------------------------------------------
+show ip nat translations
+show ip nat statistics
+clear ip nat translation *
+-----------------------------------------------------------------------------------------
+
+
+
+Standard ACL:
+=========================================================================================
+
+Numbered ACL:
+-----------------------------------------------------------------------------------------
+conf t
+access-list 10 permit host 192.168.10.2
+access-list 10 deny 192.168.10.0 0.0.0.255
+access-list 10 permit 192.168.20.0 0.0.0.255
+int s0/0/0
+ip access-group 10 out
+end
+
+
+Named ACL:
+-----------------------------------------------------------------------------------------
+ip access-list standard PERMIT-ACCESS
+permit host 192.168.10.2
+deny 192.168.10.0 0.0.0.255
+permit 192.168.20.0 0.0.0.255
+int s0/0/0
+ip access-group PERMIT-ACCESS out
+end
+
+
+
+
+
+
+Extended ACL:
+=========================================================================================
+
+Numbered ACL:
+-----------------------------------------------------------------------------------------
+conf t
+access-list 110 permit tcp 192.168.20.0 0.0.0.255 host 100.10.10.3 eq ftp
+access-list 110 deny tcp 192.168.20.0 0.0.0.255 host 100.10.10.2 eq www
+access-list 110 permit ip any any
+int g0/1
+ip access-group 110 in
+end
+
+
+
+Named ACL
+-----------------------------------------------------------------------------------------
+conf t
+ip access-list extended FILTER-CSE
+permit tcp 192.168.10.0 0.0.0.255 host 100.10.10.2 eq www
+deny tcp 192.168.10.0 0.0.0.255 host 100.10.10.3 eq ftp
+permit ip any any
+int g0/0
+ip access-group FILTER-CSE in
+end
+
+
+
+
+Show all access list of a Router:
+=========================================================================================
+show run | section access-list
+
+
+Show access list applied on a interface:
+=========================================================================================
+show ip int s0/0/0 | include access list
+
+
+
+Secure VTY Ports with a Standard IPv4 ACL
+=========================================================================================
+enable
+configure terminal
+username ADMIN secret class
+ip access-list standard ADMIN-HOST
+remark This ACL secures incoming vty lines
+permit host 192.168.10.10
+deny any
+exit
+line vty 0 4
+login local
+transport input telnet
+access-class ADMIN-HOST in
+end
