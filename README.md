@@ -615,8 +615,8 @@ The course is part of the CSE321 and CSE322 curriculum at BUET. Respect intellec
 ## 📞 Contact & Support
 
 For questions about the projects:
-- 📧 Email: [Your Email]
-- 🔗 GitHub: [Your GitHub Profile]
+- 📧 Email: afzalhossan2005021@gmail.com
+- 🔗 GitHub: https://github.com/AfzalHossan-2005021
 - 💬 Discussions: Open an issue on GitHub
 
 For course information:
