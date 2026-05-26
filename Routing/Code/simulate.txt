@@ -1,0 +1,87 @@
+#!/bin/bash
+
+# Prompt the user for input
+echo "Enter the protocol to simulate (aodv, raodv):"
+read PROTOCOL
+
+# Define the file extension
+EXT='csv'
+
+# Define the name of the file
+FILE='manet-routing'
+
+# Define the name of the directory with user defined protocol
+DIR="scratch/${PROTOCOL}_expt"
+
+# Define analysis type
+ANALYSIS='analysis'
+NODE_ANALYSIS='node-analysis'
+SPEED_ANALYSIS='speed-analysis'
+PACKET_ANALYSIS='packet-analysis'
+
+# Check if the directory exists
+if [ ! -d "${DIR}" ]; then
+  mkdir -p "${DIR}"
+fi
+
+# Check if the file already exists
+if [ -f "${DIR}/${FILE}.${ANALYSIS}.${EXT}" ]; then
+  rm "${DIR}/${FILE}.${ANALYSIS}.${EXT}"
+fi
+
+# Write the heading to the CSV file
+echo "Number of nodes,Number of packets per second,Speed of nodes,Network throughput,End-to-end delay,Packet delivery ratio,Packet drop ratio" > "${DIR}/${FILE}.${ANALYSIS}.${EXT}"
+
+# Confirm the file creation
+echo "CSV file ${DIR}/${FILE}.${ANALYSIS}.${EXT} created with heading."
+
+# # Array of node counts
+# nodes=(20 40 60 80)
+
+# # Loop through each number of nodes
+# for n in "${nodes[@]}"; do
+#   echo "Running simulation for ${n} nodes..."
+#   ./ns3 run "scratch/manet-routing-compare --outputDirName=scratch/aodv_expt --nNodes=${n}"
+# done
+
+# echo "Simulations for all nodes completed."
+
+# if [ -f "${DIR}/${FILE}.${NODE_ANALYSIS}.${EXT}" ]; then
+#   rm "${DIR}/${FILE}.${NODE_ANALYSIS}.${EXT}"
+# fi
+# mv "${DIR}/${FILE}.${ANALYSIS}.${EXT}" "${DIR}/${FILE}.${NODE_ANALYSIS}.${EXT}"
+# echo "Number of nodes,Number of packets per second,Speed of nodes,Network throughput,End-to-end delay,Packet delivery ratio,Packet drop ratio" > "${DIR}/${FILE}.${ANALYSIS}.${EXT}"
+
+
+# Array of number of packets per second
+npps=(200 300 400 500)
+
+# Loop through each number of packets per second
+for n in "${npps[@]}"; do
+  echo "Running simulation for ${n} packets per second..."
+  ./ns3 run "scratch/manet-routing-compare --outputDirName=scratch/aodv_expt --npps=${n}"
+done
+
+echo "Simulations for all number of packets per second completed."
+
+if [ -f "${DIR}/${FILE}.${PACKET_ANALYSIS}.${EXT}" ]; then
+  rm "${DIR}/${FILE}.${PACKET_ANALYSIS}.${EXT}"
+fi
+mv "${DIR}/${FILE}.${ANALYSIS}.${EXT}" "${DIR}/${FILE}.${PACKET_ANALYSIS}.${EXT}"
+echo "Number of nodes,Number of packets per second,Speed of nodes,Network throughput,End-to-end delay,Packet delivery ratio,Packet drop ratio" > "${DIR}/${FILE}.${ANALYSIS}.${EXT}"
+
+# # Array of node speed
+# speed=(5 10 15 20)
+
+# # Loop through each node spees
+# for n in "${speed[@]}"; do
+#   echo "Running simulation for node speed ${n} m/s..."
+#   ./ns3 run "scratch/manet-routing-compare --outputDirName=scratch/aodv_expt --nodeSpeed=${n}"
+# done
+
+# echo "Simulations for all node speed completed."
+
+# if [ -f "${DIR}/${FILE}.${SPEED_ANALYSIS}.${EXT}" ]; then
+#   rm "${DIR}/${FILE}.${SPEED_ANALYSIS}.${EXT}"
+# fi
+# mv "${DIR}/${FILE}.${ANALYSIS}.${EXT}" "${DIR}/${FILE}.${SPEED_ANALYSIS}.${EXT}"
