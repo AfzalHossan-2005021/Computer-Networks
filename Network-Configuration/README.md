@@ -1,4 +1,4 @@
-# 🌐 Online Networking Lab - Cisco Configuration & Simulation
+# 🌐 Networking Lab - Cisco Configuration & Simulation
 
 <div align="center">
 
